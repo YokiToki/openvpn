@@ -10,7 +10,7 @@ Setup a tiny (22MB), but full featured and secure OpenVPN server without effort 
    ```yaml
    services:
      openvpn:
-       image: ghcr.io/yokitoki/openvpn:2.6.15-1.0.0
+       image: ghcr.io/yokitoki/openvpn:2.6.14-r0-1.0.0
        container_name: openvpn
        restart: unless-stopped
        cap_add:
