@@ -9,4 +9,4 @@ services:
       - "1194:1194/udp"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./openvpn-data/conf:/etc/openvpnR
+      - ./openvpn-data:/etc/openvpnR

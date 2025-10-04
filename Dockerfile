@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.authors="Stanislav Karakovskii <toodeadtofeel@gma
 ARG OPENVPN_V
 
 COPY ./bin /usr/local/bin
-COPY ./Makefile /etc/ovpnctl
+COPY ./Makefile /etc/ovpnctl/Makefile
 
 RUN set -xe && \
     apk add --update --no-cache bash make easy-rsa iptables openssl openvpn=$OPENVPN_V && \

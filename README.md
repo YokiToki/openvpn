@@ -19,7 +19,7 @@ Setup a tiny (22MB), but full featured and secure OpenVPN server without effort 
          - "1194:1194/udp"
        volumes:
          - /etc/localtime:/etc/localtime:ro
-         - ./openvpn-data/conf:/etc/openvpn
+         - ./openvpn-data:/etc/openvpn
    ```
    and start
 
@@ -29,36 +29,36 @@ Setup a tiny (22MB), but full featured and secure OpenVPN server without effort 
 
 2. Initialize the OpenVPN configurations
    ```shell
-   ovpnctl init host=vpn.example.com
-   ovpnctl initpki
+   docker compose exec -it openvpn ovpnctl init host=vpn.example.com
+   docker compose exec -it openvpn ovpnctl initpki
    ```
 
 3. Generate a client certificate (nopass)
    ```shell
-   ovpnctl new username=test
+   docker compose exec -it openvpn ovpnctl new username=test
    ```
 Profile in `.ovpn` will stored in `/etc/openvpn`
 
 4. Revoke a client certificate
    ```shell
-   ovpnctl revoke username=test
+   docker compose exec -it openvpn ovpnctl revoke username=test
    ```
+
 5. List all generated certificate names (includes the server certificate name)
    ```shell
-   ovpnctl list
+   docker compose exec -it openvpn ovpnctl list
    ```
 
 6. Renew the CRL
    ```shell
-   ovpnctl renewcrl
+   docker compose exec -it openvpn ovpnctl renewcrl
    ```
-
 
 * To enable (bash) debug output set an environment variable with the name DEBUG and value of 1
 * To view the log output run `docker compose logs openvpn`, to view it realtime run `docker compose logs -f openvpn`
 
 ## Settings and features
-* OpenVPN 2.6.12
+* OpenVPN 2.6.14
 * Easy-RSA v3.1.5+
 * `tun` mode because it works on the widest range of devices. `tap` mode, for instance, does not work on Android, except if the device is rooted.
 * The UDP server uses`192.168.255.0/24` for clients.

@@ -10,7 +10,19 @@ fi
 
 set -e
 
+echo "Waiting for $OPENVPN/ovpn_env.sh to exist..."
+
+until [ -e "$OPENVPN/ovpn_env.sh" ]; do
+  sleep 1
+done
+
 source "$OPENVPN/ovpn_env.sh"
+
+echo "Waiting for /etc/openvpn/crl.pem, /etc/openvpn/pki/issued/$OVPN_CN.crt and /etc/openvpn/pki/private/$OVPN_CN.key to exist..."
+
+until [[ -e "/etc/openvpn/crl.pem" && -e "/etc/openvpn/pki/issued/$OVPN_CN.crt" && -e "/etc/openvpn/pki/private/$OVPN_CN.key" ]]; do
+  sleep 1
+done
 
 mkdir -p /dev/net
 if [ ! -c /dev/net/tun ]; then
