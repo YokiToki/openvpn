@@ -1,0 +1,12 @@
+services:
+  openvpn:
+    image: ghcr.io/yokitoki/openvpn:2.6.15-1.0.0
+    container_name: openvpn
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "1194:1194/udp"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./openvpn-data/conf:/etc/openvpnR

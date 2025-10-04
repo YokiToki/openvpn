@@ -1,0 +1,9 @@
+#!/bin/bash
+
+#
+# Simplify OpenVPN control utility
+#
+# author: Stanislav Karakovskii <toodeadtofeel@gmail.com>
+
+echo "make -f /etc/openvpn/Makefile $@"
+make -f /etc/openvpn/Makefile $@

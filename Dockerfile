@@ -1,11 +1,15 @@
-FROM alpine:edge
+FROM alpine:3.22
 
-LABEL org.opencontainers.image.authors="Martin van Beurden <chadoe@gmail.com>"
+# previous LABEL org.opencontainers.image.authors="Martin van Beurden <chadoe@gmail.com>"
+LABEL org.opencontainers.image.authors="Stanislav Karakovskii <toodeadtofeel@gmail.com>"
+
+ARG OPENVPN_V
 
 COPY ./bin /usr/local/bin
+COPY ./Makefile /etc/openvpn
 
 RUN set -xe && \
-    apk add --update --no-cache bash easy-rsa iptables openssl openvpn=2.6.12-r1 && \
+    apk add --update --no-cache bash make easy-rsa iptables openssl openvpn=$OPENVPN_V && \
     ln -s /usr/share/easy-rsa/easyrsa /usr/local/bin && \
     chmod 774 /usr/local/bin/*
 

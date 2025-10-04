@@ -1,63 +1,61 @@
 # OpenVPN for Docker
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/chadoe/docker-openvpn/master/LICENSE)
-[![Docker Pulls](https://img.shields.io/docker/pulls/martin/openvpn.svg)](https://hub.docker.com/r/martin/openvpn/)
-[![Docker Stars](https://img.shields.io/docker/stars/martin/openvpn.svg)](https://hub.docker.com/r/martin/openvpn/)
-
 
 Setup a tiny(12MB), but full featured and secure OpenVPN server without effort using Docker.
 
 ## Quick Start
 
-1. Create the `$OVPN_DATA` volume container 
+1. Create the docker-compose.yml file
+   ```yaml
+   services:
+     openvpn:
+       image: ghcr.io/yokitoki/openvpn:2.6.15-1.0.0
+       container_name: openvpn
+       restart: unless-stopped
+       cap_add:
+         - NET_ADMIN
+       ports:
+         - "1194:1194/udp"
+       volumes:
+         - /etc/localtime:/etc/localtime:ro
+         - ./openvpn-data/conf:/etc/openvpn
+   ```
+   and start
 
-        export OVPN_DATA=openvpn_data
-        docker volume create --name $OVPN_DATA
+   ```shell
+   docker compose up -d
+   ```
 
-2. Initialize the `$OVPN_DATA` container that will hold the configuration files and certificates
+2. Initialize the OpenVPN configurations
+   ```shell
+   ovpnctl init host=vpn.example.com
+   ovpnctl initpki
+   ```
 
-        docker run -v $OVPN_DATA:/etc/openvpn --rm martin/openvpn initopenvpn -u udp://VPN.SERVERNAME.COM
+3. Generate a client certificate (nopass)
+   ```shell
+   ovpnctl new username=test
+   ```
+Profile in `.ovpn` will stored in `/etc/openvpn`
 
-        docker run -v $OVPN_DATA:/etc/openvpn --rm -it martin/openvpn initpki
+4. Revoke a client certificate
+   ```shell
+   ovpnctl revoke username=test
+   ```
+5. List all generated certificate names (includes the server certificate name)
+   ```shell
+   ovpnctl list
+   ```
 
-3. Start OpenVPN server process
+6. Renew the CRL
+   ```shell
+   ovpnctl renewcrl
+   ```
 
-        docker run --name openvpn -v $OVPN_DATA:/etc/openvpn -v /etc/localtime:/etc/localtime:ro -d -p 1194:1194/udp --cap-add=NET_ADMIN martin/openvpn
 
-4. Generate a client certificate
-
-        docker run -v $OVPN_DATA:/etc/openvpn --rm -it martin/openvpn easyrsa build-client-full CLIENTNAME
-
-    - Or without a passphrase (only do this for testing purposes)
-
-            docker run -v $OVPN_DATA:/etc/openvpn --rm -it martin/openvpn easyrsa build-client-full CLIENTNAME nopass
-
-5. Retrieve the client configuration with embedded certificates
-
-        docker run -v $OVPN_DATA:/etc/openvpn --rm martin/openvpn getclient CLIENTNAME > CLIENTNAME.ovpn
-
-    - Or retrieve the client configuration with mssfix set to a lower value (yay Ziggo WifiSpots)
-
-            docker run -v $OVPN_DATA:/etc/openvpn --rm martin/openvpn getclient -M 1312 CLIENTNAME > CLIENTNAME.ovpn
-
-6. Revoke a client certificate
-		
-    If you need to remove access for a client then you can revoke the client certificate by running
-
-        docker run -v $OVPN_DATA:/etc/openvpn --rm -it martin/openvpn revokeclient CLIENTNAME
-
-7. List all generated certificate names (includes the server certificate name)
-
-        docker run -v $OVPN_DATA:/etc/openvpn --rm martin/openvpn listcerts
-
-8. Renew the CRL
-
-        docker run -v $OVPN_DATA:/etc/openvpn --rm -it martin/openvpn renewcrl
-
-* To enable (bash) debug output set an environment variable with the name DEBUG and value of 1 (using "docker -e")
-        for example `docker run -e DEBUG=1 --name openvpn -v $OVPN_DATA:/etc/openvpn -v /etc/localtime:/etc/localtime:ro -d -p 1194:1194/udp --cap-add=NET_ADMIN martin/openvpn`
-
-* To view the log output run `docker logs openvpn`, to view it realtime run `docker logs -f openvpn`
+* To enable (bash) debug output set an environment variable with the name DEBUG and value of 1
+* To view the log output run `docker compose logs openvpn`, to view it realtime run `docker compose logs -f openvpn`
 
 ## Settings and features
 * OpenVPN 2.6.12
@@ -90,5 +88,8 @@ Setup a tiny(12MB), but full featured and secure OpenVPN server without effort u
   * Android, OpenVPN for Android 0.7.46
   * Windows 10 64 bit using openvpn-2.6.5
 
+## Credits
 
-Based on [kylemanna/docker-openvpn](https://github.com/kylemanna/docker-openvpn).
+- Based on [chadoe/docker-openvpn](https://github.com/chadoe/docker-openvpn).
+- Based on [kylemanna/docker-openvpn](https://github.com/kylemanna/docker-openvpn).
+
