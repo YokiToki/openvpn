@@ -5,5 +5,5 @@
 #
 # author: Stanislav Karakovskii <toodeadtofeel@gmail.com>
 
-echo "make -f /etc/openvpn/Makefile $@"
-make -f /etc/openvpn/Makefile $@
+echo "make -f /etc/ovpnctl/Makefile $@"
+make -f /etc/ovpnctl/Makefile $@

@@ -6,7 +6,7 @@ LABEL org.opencontainers.image.authors="Stanislav Karakovskii <toodeadtofeel@gma
 ARG OPENVPN_V
 
 COPY ./bin /usr/local/bin
-COPY ./Makefile /etc/openvpn
+COPY ./Makefile /etc/ovpnctl
 
 RUN set -xe && \
     apk add --update --no-cache bash make easy-rsa iptables openssl openvpn=$OPENVPN_V && \
@@ -24,4 +24,5 @@ VOLUME ["/etc/openvpn"]
 EXPOSE 1194/udp
 
 WORKDIR /etc/openvpn
+
 CMD ["startopenvpn"]

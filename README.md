@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/chadoe/docker-openvpn/master/LICENSE)
 
-Setup a tiny(12MB), but full featured and secure OpenVPN server without effort using Docker.
+Setup a tiny (22MB), but full featured and secure OpenVPN server without effort using Docker.
 
 ## Quick Start
 
