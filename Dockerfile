@@ -2,6 +2,7 @@ FROM alpine:3.22
 
 # previous LABEL org.opencontainers.image.authors="Martin van Beurden <chadoe@gmail.com>"
 LABEL org.opencontainers.image.authors="Stanislav Karakovskii <toodeadtofeel@gmail.com>"
+LABEL org.opencontainers.image.description="Setup a tiny (22MB), but full featured and secure OpenVPN server in a few easy steps using Docker."
 
 ARG OPENVPN_V
 
